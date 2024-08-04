@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -36,7 +38,8 @@ func (c *CyberismController) persistSaveData() {
 }
 
 func (c *CyberismController) initializeGemini() *genai.Client {
-	client, err := genai.NewClient(context.Background(), option.WithAPIKey(apiKey))
+	key := c.getGeminiAPIKey()
+	client, err := genai.NewClient(context.Background(), option.WithAPIKey(key))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,6 +67,18 @@ func (c *CyberismController) initializeGemini() *genai.Client {
 	}
 	c.gemini.Load()
 	return client
+}
+
+func (c *CyberismController) getGeminiAPIKey() string {
+	if *apiKey != "" {
+		return *apiKey
+	}
+	if os.Getenv("CYBERISM_API_KEY") != "" {
+		return os.Getenv("CYBERISM_API_KEY")
+	}
+	c.txt.Println(errAPIKey)
+	log.Fatal(errors.New(errAPIKey))
+	return ""
 }
 
 func (c *CyberismController) runIntroRoutine() {

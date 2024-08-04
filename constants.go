@@ -39,6 +39,7 @@ const tPromptPrefix = "▶ "
 
 // Errors
 const tGameError = "<CYBERISM GAME ERROR: %s>"
+const errAPIKey = "CYBERISM_API_KEY environment variable or --api_key flag must be set"
 
 // Progress Spinner
 var progressAnim = []string{"◢", "◣", "◤", "◥"}
@@ -49,6 +50,6 @@ const progressSpeed = 50 * time.Millisecond
 const cmdQuit = "quit"
 const cmdGameOver = "GAME OVER"
 
-const apiKey = ""
+// Configuration variables & files
 const geminiModel = "gemini-1.5-pro-latest"
 const filePath = "_cyberism.json"
