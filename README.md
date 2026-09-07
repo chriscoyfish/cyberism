@@ -1,41 +1,91 @@
-# Cyberism: A GenAI-Powered Text Adventure
+# Cyberism: GenAI-Powered Cyberpunk Red RPG Web Application
 
-**Author:** Chris (Coy) Coykendall (chriscoyfish@gmail.com)
+**Author:** Chris (Coy) Coykendall (chriscoyfish@gmail.com)  
+**Live Application:** [https://cyberism.coyfish.tech](https://cyberism.coyfish.tech)
 
-## Overview
+A full-stack, server-side web application port of **Cyberism**, powered by Google Gemini AI, Cyberpunk Red tabletop mechanics, user authentication, and multi-slot persistent state saving.
 
-Cyberism is a text-based adventure game set in a Cyberpunk-style dystopian future where technology has become all-encompassing. You are Senna Bladesmith, a hard-boiled detective who must navigate a world of corporate espionage, government surveillance, and artificial intelligence.
+---
 
-![](screenshot.png?raw=true)
+## 🚀 Features
 
+- **Cyberpunk Red RPG AI Game Master**: Immersive, dark & gritty narration driven by Google Gemini with Cyberpunk Red referee rules.
+- **Dynamic 5-Choice Tactical Deck**: Generates 5 situational actions per turn with quick 1-click or keyboard (1-5) execution.
+- **User Authentication**: Secure operative login & registration using JWT session cookies and bcrypt password hashing.
+- **Multi-Slot State Saving**:
+  - Cloud database persistence with multi-slot chronicle saves (Slots 1–5).
+  - Turn-by-turn local autosaving.
+  - JSON Datashard Export & Import for offline backups.
+- **Character Dossier (Senna Bladesmith)**: Real-time tracking of HP vitals, Humanity meter, Eurodollars (₢), Cyberpunk Red attributes (REF, INT, TECH, COOL, WILL, EMP, BODY), installed Chrome / Cyberware, and Case Notes.
+- **Tactical Terminal HUD**:
+  - CRT scanlines filter toggle.
+  - Web Audio API retro synthesized sound effects (terminal beeps, dice rolls, warning buzzers).
+  - Rich text formatting for dialogue `"speech"`, custom actions `{actions}`, OOC rules queries `<ooc>`, and dice check badges `(d10 + stat vs DV)`.
+  - Automatic `GAME OVER` post-mortem detection.
 
-## Features
+---
 
-Cyberism leverages the powerful Gemini AI APIs to build a world set using the general mechanics of Cyberpunk Red and an automated system for driving forward narration.
+## 🛠 Tech Stack
 
-* **Choice-driven narrative:** Your decisions shape the story and determine your fate.
-* **Intriguing characters:** Meet a cast of colorful characters, both allies and enemies.
-* **Cyberpunk atmosphere:** Immerse yourself in a world of neon lights, gritty streets, and advanced technology.
-* **Puzzles and challenges:** Test your hacking skills and problem-solving abilities.
-* **Text-based interface:** The game is played through text prompts and commands.
-* **Turn-based system:** You make choices and actions in turn-based fashion.
-* **Inventory management:** Collect items and use them to your advantage.
+- **Framework**: Next.js 15 (App Router) + React 19 + TypeScript
+- **AI Engine**: Google Gemini API (`@google/generative-ai`)
+- **Database / Storage**: LibSQL / SQLite (supports local file storage or remote Turso/Postgres/serverless)
+- **Auth**: JOSE (JWT) + HTTP-only cookies + bcryptjs
+- **Styling & Audio**: Cyberpunk CSS Design System + Web Audio API synthesizer
 
-## Installation
+---
 
-1. Download: `git clone https://github.com/chriscoyfish/cyberism.git`
-2. Go into the downloaded directory: `cd cyberism`
-3. Generate a Google Cloud API key w/ Gemini API permissions and pass this as --api_key or set the CYBERISM_API_KEY environment variable in your host.
-    * See https://aistudio.google.com/app/apikey for the simple way to get this.
-3. Run `go run .`
+## 📦 Getting Started
 
-## Controls
-Make numeric prepared selections with the numbers provided to advance the narrative. You may attempt character speech in quotes "like this". You may ask the game out-of-character instructions and questions in angle brackets <like this>. You may perform explicit actions {like this}.
+### 1. Clone & Install Dependencies
 
-**NOTE:** This is a work in progress using Gemini API (which is not perfect), and more features are being added regularly. Stay tuned for updates!
+```bash
+git clone https://github.com/chriscoyfish/cyberism.git
+cd cyberism
+npm install
+```
 
-**Enjoy the game!**
+### 2. Environment Variables
 
-## Updates
+Create a `.env.local` file in the root directory:
 
-**2024-08-04** Initial commit. Notably still need to implement saving game state.
+```env
+# Google Gemini API Key (https://aistudio.google.com/app/apikey)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# JWT Secret for Session Auth
+JWT_SECRET=your_super_secret_jwt_key_here
+
+# Database URL (Default: local SQLite database file)
+DATABASE_URL=file:./cyberism.db
+```
+
+### 3. Run Development Server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🚢 Deploy to Vercel
+
+1. Push your repository to GitHub.
+2. Import the repository in the [Vercel Dashboard](https://vercel.com).
+3. Add the following **Environment Variables** in project settings:
+   - `GEMINI_API_KEY`: Your Google Gemini API key.
+   - `JWT_SECRET`: A secure random secret string.
+   - `DATABASE_URL` (optional): `file:./cyberism.db` or your Turso connection URL `libsql://your-db.turso.io`.
+   - `DATABASE_AUTH_TOKEN` (optional): If using Turso cloud DB.
+4. Click **Deploy**.
+
+---
+
+## 🎮 Game Controls & Syntax
+
+- **Choices 1–5**: Press keys `1` to `5` on your keyboard or click any action button.
+- **Speech**: Wrap dialogue in quotes `"like this"` to speak to NPCs.
+- **Explicit Actions**: Wrap actions in curly braces `{like this}` (e.g. `{Draw pistol and take cover}`).
+- **OOC / Rules**: Wrap questions in angle brackets `<like this>` (e.g. `<What is my handgun skill check?>`).
